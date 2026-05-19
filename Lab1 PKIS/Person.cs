@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lab1_PKIS
 {
-    public class Person
+    public class Person : IDateAndCopy
     {
-        private string name;
-        private string surname;
-        private DateTime birthday;
+        protected string name;
+        protected string surname;
+        protected DateTime birthday;
 
         public Person(string name, string surname, DateTime birthday)
         {
@@ -25,6 +20,12 @@ namespace Lab1_PKIS
             this.name = "Oleksandr";
             this.surname = "Kochala";
             this.birthday = new DateTime(2000, 1, 1);
+        }
+
+        public DateTime Date
+        {
+            get { return birthday; }
+            init { birthday = value; }
         }
 
         public string Name
@@ -66,5 +67,39 @@ namespace Lab1_PKIS
         {
             return $"Surname: {surname}, Name: {name}";
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is Person other)
+            {
+                return name == other.name &&
+                       surname == other.surname &&
+                       birthday == other.birthday;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(name, surname, birthday);
+        }
+
+        public static bool operator ==(Person p1, Person p2)
+        {
+            if (ReferenceEquals(p1, p2)) return true;
+            if (p1 is null || p2 is null) return false;
+            return p1.Equals(p2);
+        }
+
+        public static bool operator !=(Person p1, Person p2)
+        {
+            return !(p1 == p2);
+        }
+
+        public virtual object DeepCopy()
+        {
+            return new Person(name, surname, birthday);
+        }
+
     }
 }

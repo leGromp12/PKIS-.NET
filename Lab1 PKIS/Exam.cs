@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Lab1_PKIS
 {
@@ -11,11 +9,22 @@ namespace Lab1_PKIS
         SecondEducation
     }
 
-    public class Exam
+    public class Exam : IDateAndCopy
     {
         public string Subject { get; set; }
         public int Grade { get; set; }
         public DateTime ExamDate { get; set; }
+
+        public DateTime Date
+        {
+            get { return ExamDate; }
+            init { ExamDate = value; }
+        }
+
+        public object DeepCopy()
+        {
+            return new Exam(Subject, Grade, ExamDate);
+        }
 
         public Exam(string subject, int grade, DateTime examDate)
         {

@@ -1,6 +1,4 @@
-using Lab1_PKIS;
 using System;
-using System.Diagnostics;
 
 namespace Lab1_PKIS
 {
@@ -8,68 +6,75 @@ namespace Lab1_PKIS
     {
         static void Main()
         {
-            Student student = new Student();
-            Console.WriteLine("ToShortString()");
-            Console.WriteLine(student.ToShortString());
+            Person p1 = new Person("Ivan", "Petrenko", new DateTime(2000, 1, 1));
+            Person p2 = new Person("Ivan", "Petrenko", new DateTime(2000, 1, 1));
 
-            Console.WriteLine("\nIndexer");
-            Console.WriteLine($"Master: {student[Education.Master]}");
-            Console.WriteLine($"Bachelor: {student[Education.Bachelor]}");
-            Console.WriteLine($"SecondEducation: {student[Education.SecondEducation]}");
+            Console.WriteLine("ReferenceEquals: " + ReferenceEquals(p1, p2));
+            Console.WriteLine("Equals: " + p1.Equals(p2));
+            Console.WriteLine("Hash1: " + p1.GetHashCode());
+            Console.WriteLine("Hash2: " + p2.GetHashCode());
 
+            Student st = new Student(p1, Education.Master, 200);
 
-            student = new Student(
-                new Person("Oleksandr", "Kochala", new DateTime(2005, 10, 17)),
-                Education.Bachelor,
-                305
+            st.AddExams(
+                new Exam("Math", 5, DateTime.Now),
+                new Exam("Physics", 3, DateTime.Now),
+                new Exam("Programming", 4, DateTime.Now)
             );
 
-            Console.WriteLine("\nToString() after adding");
-            Console.WriteLine(student.ToString());
+            st.Exams.Add(new Exam("English", 2, DateTime.Now));
 
-            Exam e1 = new Exam("Math", 95, DateTime.Now);
-            Exam e2 = new Exam("Physics", 88, DateTime.Now);
-            Exam e3 = new Exam("Programming", 100, DateTime.Now);
+            st.Tests.Add(new Test("Math", true));
+            st.Tests.Add(new Test("Physics", false));
 
-            student.AddExams(e1, e2, e3);
+            Console.WriteLine("\n=== Student ===");
+            Console.WriteLine(st.ToString());
 
-            Console.WriteLine("\nafter AddExams()");
-            Console.WriteLine(student.ToString());
-            
-            const int n = 500;
-            int total = n * n;
+            Console.WriteLine("\n=== Person from Student ===");
+            Console.WriteLine(st.PersonData);
 
-            Stopwatch sw = new Stopwatch();
+            Student copy = (Student)st.DeepCopy();
 
-            Exam[] arr1D = new Exam[total];
-            sw.Start();
-            for (int i = 0; i < arr1D.Length; i++)
-                arr1D[i] = new Exam();
-            sw.Stop();
-            Console.WriteLine($"\n1D array time: {sw.ElapsedMilliseconds} ms");
+            st.AddExams(new Exam("Biology", 2, DateTime.Now));
 
+            Console.WriteLine("\n=== Original ===");
+            Console.WriteLine(st.ToString());
 
+            Console.WriteLine("\n=== Copy ===");
+            Console.WriteLine(copy.ToString());
 
-            sw.Reset();
-            Exam[,] arr2D = new Exam[n, n];
-            sw.Start();
-            for (int i = 0; i < n; i++)
-                for (int j = 0; j < n; j++)
-                    arr2D[i, j] = new Exam();
-            sw.Stop();
-            Console.WriteLine($"2D rectangular time: {sw.ElapsedMilliseconds} ms");
+            try
+            {
+                Student bad = new Student(p1, Education.Bachelor, 200) { GroupNumber = 50 };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nException: " + ex.Message);
+            }
 
-            sw.Reset();
-            Exam[][] jagged = new Exam[n][];
-            for (int i = 0; i < n; i++)
-                jagged[i] = new Exam[n];
+            Console.WriteLine("\n=== Exams > 3 ===");
+            foreach (Exam e in st.GetExamsHigherThan(3))
+            {
+                Console.WriteLine(e);
+            }
 
-            sw.Start();
-            for (int i = 0; i < n; i++)
-                for (int j = 0; j < n; j++)
-                    jagged[i][j] = new Exam();
-            sw.Stop();
-            Console.WriteLine($"Jagged array time: {sw.ElapsedMilliseconds} ms");
+            Console.WriteLine("\n=== Common subjects ===");
+            foreach (string s in st)
+            {
+                Console.WriteLine(s);
+            }
+
+            Console.WriteLine("\n=== Passed tests and exams ===");
+            foreach (var item in st.GetPassed())
+            {
+                Console.WriteLine(item);
+            }
+
+            Console.WriteLine("\n=== Passed tests with passed exams ===");
+            foreach (Test t in st.GetPassedTestsWithExams())
+            {
+                Console.WriteLine(t);
+            }
         }
     }
 }
