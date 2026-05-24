@@ -144,6 +144,7 @@ namespace Lab1_PKIS
         public override string ToShortString()
         {
             return $"Student: {name} {surname}, " +
+                   $"Birthday: {birthday.ToShortDateString()}, " +
                    $"Education: {education}, " +
                    $"Group: {groupNumber}, " +
                    $"Average: {AverageGrade:F2}";
