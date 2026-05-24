@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="../Lab3_PKIS/Lab3_PKIS/Lab3_PKIS.csproj" Id="c72bbb9e-f0f3-48ec-a54b-62cab5c79fa5" />
   <Project Path="Lab1 PKIS/Lab1_PKIS.csproj" />
+  <Project Path="Lab4_PKIS/Lab4_PKIS.csproj" Id="db3de44a-2289-4186-929b-6ccb88738984" />
 </Solution>
